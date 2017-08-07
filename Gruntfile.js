@@ -6,7 +6,7 @@ grunt.initConfig({
 
        jshint: {
          
-          all: ['js/*.js']
+          all: ['public/js/*.js']
 
        },
 
@@ -16,7 +16,7 @@ grunt.initConfig({
                 style: 'expanded'
             },
             files: {
-                'css/global.css': 'sass/global.scss'
+                'public/css/global.css': 'public/sass/global.scss'
             }
         } ,
         minified: {
@@ -24,7 +24,7 @@ grunt.initConfig({
                 style: 'compressed'
             },
             files: {
-                'css/global.min.css': 'sass/global.scss'
+                'public/css/global.min.css': 'public/sass/global.scss'
             }
         } 
     },
@@ -33,40 +33,41 @@ grunt.initConfig({
         
          dist: {
             src: [
-                'js/libs/*.js', // tous les JS dans libs
-                'js/global.js'  // ce fichier là
+                'public/js/libs/*.js', // tous les JS dans libs
+                'public/js/global.js'  // ce fichier là
                 ],
-            dest: 'js/build/production.js' 
+            dest: 'public/js/build/production.js' 
          }
 
     },
       // 3. la configuration pour la minification va ici.  
-    uglify: {
+    uglify: { 
         options:{
             mangle:false
         },
         build: {
-            src: 'js/build/production.js',
-            dest: 'js/build/production.min.js'
+            src: 'public/js/build/production.js',
+            dest: 'public/js/build/production.min.js'
         }
     },
+   
      // 4. la configuration pour la minification et concaténation automatique va ici.  
     watch: {
-        options:{livereload:true},
+        options: {
+            livereload: true,
+          },
         scripts: {
-            files: ['js/*.js'],
+            files: [ 'index.html','global.css','Gruntfile.js','js/*.js'],
             tasks: ['concat', 'uglify'],
-            options: {
-                spawn: false,
-            },
+            
         },
         css: {
-            files: ['sass/*.scss'],
+            files: ['public/sass/*.scss'],
                 tasks: ['sass'],
                 
             } 
     },
-    express:{
+    express:{ 
             all:{
                 options:{
                     port:3000,
@@ -86,10 +87,12 @@ grunt.loadNpmTasks('grunt-contrib-sass');
 grunt.loadNpmTasks('grunt-contrib-concat');
 grunt.loadNpmTasks('grunt-contrib-uglify');
 grunt.loadNpmTasks('grunt-contrib-watch');
+
 grunt.loadNpmTasks('grunt-express');
+grunt.loadNpmTasks('grunt-serve');
     
 // 6. Nous disons à Grunt quoi faire lorsque nous tapons "grunt" dans la console.
 grunt.registerTask('default', ['jshint','watch','concat','uglify',]);
-grunt.registerTask('server',['express','watch']);
+grunt.registerTask('server',['express','watch','sass']);
 
-};
+}; 
